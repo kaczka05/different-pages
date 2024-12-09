@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Networking Protocols and Concepts</title>
+</head>
+<body>
+    <h1>Networking Protocols and Concepts</h1>
+
+    <h2>1.1. Describe the following:</h2>
+
+    <h3>TCP Protocol</h3>
+    <p>
+        TCP (Transmission Control Protocol) is a connection-oriented communication protocol that is used to ensure reliable data transmission between devices over a network. It guarantees that data packets arrive at their destination in the correct order and without errors. TCP is commonly used for applications where reliability is crucial, such as web browsing (HTTP), email (SMTP), and file transfer (FTP).
+    </p>
+	<h4>TCP Header Structure</h4>
+		<p> |          Source Port           |       Destination Port         |</p>
+		<p> |                        Sequence Number                          |</p>
+		<p> |                    Acknowledgment Number                        |</p>
+		<p> |  Data Offset  |Reserved|  Flags  |        Window Size           |</p>
+		<p> |         Checksum          |       Urgent Pointer                |</p>
+		<p> |                   Options (if any) and Padding                  |</p>
+		<p> |                           Data                                  |</p>
+	<h3>TCP Protocol Parameters</h3>
+    <p>
+        TCP protocol has several key parameters that govern its behavior:
+        <ul>
+            <li><strong>Sequence Number:</strong> Identifies the order of data packets.</li>
+            <li><strong>Acknowledgment Number:</strong> The number that confirms receipt of data packets.</li>
+            <li><strong>Window Size:</strong> The amount of data that can be sent before requiring an acknowledgment.</li>
+            <li><strong>Checksum:</strong> Ensures the integrity of data by verifying that the data has not been altered during transmission.</li>
+            <li><strong>Flags:</strong> Control bits used for various functions like connection initiation and termination (e.g., SYN, ACK, FIN).</li>
+        </ul>
+    </p>
+	<h4>TCP checksum</h4>
+	<p>Checksum is an inverted sum of parts:</p>
+	<ol>
+	<li>Pseudo header: hexadecimal number created from parts in binary sourceIP,destinationIP,protocol, length of header and payload</li>
+	<li>TCP header: hexadecimal number created from parts in binary, Source port, destination port, sequence number, acknowledgment, flag, window size, checksum (0000), urgent pointer</li>
+	<li>Payload: content of packet written in hexadecimal</li>
+	</ol>
+	<h4>TCP Flags</h4>
+	<p>Flags:  00000010 (binary)</p>
+		  <p>  ||||||||</p>
+		  <p>  |||||||+-- FIN: Not set</p>
+		  <p>  ||||||+--- SYN: Set (1)</p>
+		  <p>  |||||+---- RST: Not set</p>
+		  <p>  ||||+----- PSH: Not set</p>
+		  <p>  |||+------ ACK: Not set</p>
+		  <p>  ||+------- URG: Not set</p>
+		<p></p>
+		<p>URG: It is used to incdicate that urgent data is to processed by the system imidietly (with skipping buffor) like emergency signals. Data is indicated by URG pointer later in header.</p>
+		<p>ACK: Is used to acknowledge SYN request in the three way handshake. It means that in the Ack part, will be next part of sequence recieved.</p>
+		<p>PSH: It is used to make system process data imidietly but unlike URG it does it with the whole packet</p>
+		<p>RST: It is used when it is needed to terminate a connection imidietly whith droping of all sent data. It is used in wrongly made connections (ex. in 3 way handshake), as a response to trying to connect to unused port, to indicate a crash or as a security response to attacks</p>
+		<p>SYN: It is used int 3 way handshake to indicate that it has a Sequence number in its header part</p>
+		<p>
+	 <h3>TCP Connection</h3>
+
+    <h3>Three-Way Handshake</h3>
+    <p>
+        The three-way handshake is the process by which a TCP connection is established between a client and server:
+        <ol>
+            <li><strong>Step 1:</strong> The client sends a SYN (synchronize) message to the server to initiate the connection with sequence number .</li>
+            <li><strong>Step 2:</strong> The server responds with a SYN-ACK message to acknowledge the request this means it responds with sequence number +1 and it's own sequence.</li>
+            <li><strong>Step 3:</strong> The client sends an ACK message to confirm the server's acknowledgment which is original sequence+1 and servers sequence +1. The connection is now established, and data can be exchanged.</li>
+        </ol>
+    </p>
+	<h3>Four-Way Handshake </h3>
+	<p>
+		Four-way handshake is the process allowing for orderly closure of the connection between client and server.
+		<ol>
+		<li><strong>Step 1:</strong> The client sends a FIN flagged packet witha a sequence number.
+		<li><strong>Step 2:</strong> The server respondes with a ACK flagged packet with a sequence of FIN packet + 1. Now the connection is half-closed and only the last packet will be sent
+		<li><strong>Step 3:</strong> The server sends its own FIN flagged packet with another sequence number indicating that it is ready to close the connection.
+		<li><strong>Step 4:</strong> The client responds with ACK flagged packet with with a sequence of FIN packet + 1. Now the connection is terminated.
+		</ol>
+	</p>
+	<h3>UDP Protocol</h3>
+    <p>
+        UDP (User Datagram Protocol) is a connectionless communication protocol. Unlike TCP, UDP does not establish a connection before sending data and does not guarantee the delivery of packets. It is faster than TCP but less reliable. UDP is commonly used in applications that prioritize speed over reliability, such as video streaming, online gaming, and DNS lookups.
+    </p>
+    <h3>UDP Protocol Parameters</h3>
+    <p>
+        UDP has fewer parameters than TCP because it is connectionless. Key parameters include:
+        <ul>
+            <li><strong>Source Port:</strong> The sending application's port number.</li>
+            <li><strong>Destination Port:</strong> The receiving application's port number.</li>
+            <li><strong>Length:</strong> The length of the UDP packet.</li>
+            <li><strong>Checksum:</strong> Used to check the integrity of data (optional in IPv4 but mandatory in IPv6).</li>
+        </ul>
+    </p>
+
+    <h2>2.1 Practical Part</h2>
+    
+    <h3>2.1.1 Task 1: Identifying Ports for www.google.com</h3>
+    <p>
+        Below is the captured data showing the ports used during the connection to www.google.com:
+    </p>
+    <img src="1.png" alt="Task 1 Port Identification">
+
+    <h3>2.1.2 Task 2: File Transfer using FTP</h3>
+    <p>
+        Captured data showing ports used during file transfer to the server via FTP:
+    </p>
+    <img src="3.png" alt="Task 2 FTP Transfer Part 1">
+    <img src="4.png" alt="Task 2 FTP Transfer Part 2">
+
+    <h3>2.1.3 Task 3: File Transfer using SCP or SFTP</h3>
+    <p>
+        Captured data showing ports used during file transfer to the server via SCP/SFTP:
+    </p>
+    <img src="5.png" alt="Task 3 SCP/SFTP Transfer Part 1">
+    <img src="6.png" alt="Task 3 SCP/SFTP Transfer Part 2">
+
+    <h3>2.1.4 Task 4: DNS Protocol and Ports</h3>
+    <p>
+        Captured data showing the protocol and port used by DNS in the transport layer:
+    </p>
+    <img src="7.png" alt="Task 4 DNS Protocol and Port">
+
+</body>
+</html>
