@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politechnika Łódzka - Student Information Portal</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #d32f2f; /* Red */
+            color: #ffffff;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar h2 {
+            margin: 0 0 20px;
+            font-size: 20px;
+            text-align: center;
+        }
+        .menu {
+            list-style: none;
+            padding: 0;
+        }
+        .menu li {
+            margin-bottom: 10px;
+        }
+        .menu a {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .menu a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .file-section {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .file-section h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .file-section p {
+            margin: 5px 0;
+        }
+        .file-section a {
+            color: #d32f2f;
+            text-decoration: none;
+        }
+        .file-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile specific styles */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                display: none;
+            }
+            .sidebar.active {
+                display: block;
+            }
+            .menu-button {
+                display: block;
+                background-color: #d32f2f;
+                color: #ffffff;
+                border: none;
+                padding: 10px;
+                font-size: 16px;
+                cursor: pointer;
+                text-align: left;
+            }
+        }
+
+        .menu-button {
+            display: none;
+        }
+    </style>
+    <script>
+        function showContent(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.file-section');
+            sections.forEach(section => section.style.display = 'none');
+
+            // Show the selected section
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.style.display = 'block';
+            }
+
+            // Hide the sidebar if in mobile view
+            if (window.innerWidth <= 768) {
+                document.querySelector('.sidebar').classList.remove('active');
+            }
+        }
+
+        function toggleMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <button class="menu-button" onclick="toggleMenu()">Menu</button>
+        <div class="sidebar">
+            <h2>Politechnika Łódzka</h2>
+            <ul class="menu">
+                <li><a onclick="showContent('general')">General Organisation</a></li>
+                <li><a onclick="showContent('scholarships')">Scholarships</a></li>
+                <li><a onclick="showContent('exams')">Exams & Grading</a></li>
+                <li><a onclick="showContent('housing')">Student Housing</a></li>
+                <li><a onclick="showContent('events')">Events & Activities</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <div id="general" class="file-section">
+                <h3>General Organisation</h3>
+                <p>Learn about the university's organisational structure, departments, and administrative contacts.</p>
+                <a href="files/general_organisation.pdf" target="_blank">Download: General Organisation (PDF)</a>
+            </div>
+            <div id="scholarships" class="file-section">
+                <h3>Scholarships</h3>
+                <p>Details about available scholarships and how to apply.</p>
+                <a href="files/scholarships.pdf" target="_blank">Download: Scholarships Information (PDF)</a>
+            </div>
+            <div id="exams" class="file-section">
+                <h3>Exams & Grading</h3>
+                <p>Understand the university's examination and grading policies.</p>
+                <a href="files/exams_grading.pdf" target="_blank">Download: Exams & Grading Policies (PDF)</a>
+            </div>
+            <div id="housing" class="file-section">
+                <h3>Student Housing</h3>
+                <p>Information about on-campus and off-campus housing options.</p>
+                <a href="files/student_housing.pdf" target="_blank">Download: Student Housing Guide (PDF)</a>
+            </div>
+            <div id="events" class="file-section">
+                <h3>Events & Activities</h3>
+                <p>Explore upcoming university events and student activities.</p>
+                <a href="files/events_activities.pdf" target="_blank">Download: Events & Activities (PDF)</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
