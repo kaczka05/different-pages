@@ -98,6 +98,15 @@
         .menu-button {
             display: none;
         }
+		
+		.section {
+		padding: 1rem 1.5rem;
+		max-width: 1200px;
+		margin: 1rem ;
+		background: #fff;
+		border-radius: 10px;
+		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+		}
     </style>
     <script>
         function showContent(sectionId) {
@@ -131,36 +140,164 @@
             <ul class="menu">
                 <li><a onclick="showContent('general')">General Organisation</a></li>
                 <li><a onclick="showContent('scholarships')">Scholarships</a></li>
-                <li><a onclick="showContent('exams')">Exams & Grading</a></li>
+                <li><a onclick="showContent('admissions')">Admissions</a></li>
                 <li><a onclick="showContent('housing')">Student Housing</a></li>
-                <li><a onclick="showContent('events')">Events & Activities</a></li>
+                <li><a onclick="showContent('organisations')">Student Organisations</a></li>
+				<li><a onclick="showContent('map')">Campus map</a></li>
+				<li><a onclick="showContent('services')">Services</a></li>
             </ul>
         </div>
         <div class="content">
+		
+			<!-- zakładka -->
             <div id="general" class="file-section">
                 <h3>General Organisation</h3>
                 <p>Learn about the university's organisational structure, departments, and administrative contacts.</p>
+					
+					<li><a href="#aktualnosci">Aktualności</a></li>
+					
+					<section id="aktualnosci" class="section">
+					<h1>Aktualności</h1>
+					<p>1.	What are the office hours of the dean's office and where is it located?</p></br>
+					<p>Office hours vary depending on the faculty. Generally, they are weekdays from 8:00 AM to 4:00 PM. Detailed information about office hours and the location of the dean's office can be found on the university website or directly on the dean's office door.</p></br>
+					<p>2.	How can I obtain a certificate of enrollment?</p></br>
+					<p>You can obtain a certificate of enrollment by submitting a request to the dean's office. Certificates are typically issued within a few working days.</p></br>
+					<p>3.	Can I change my class group during the semester?</p></br>
+					<p>Changing class groups is possible in justified cases, such as scheduling conflicts. The decision is made by the lecturer or the dean's office, and the process may require submitting a request.</p></br>
+					<p>4.	Where can I find information about the university’s regulations?</p></br>
+					<p>Regulations are available on the university's website under the "Documents" section. They can also be obtained from the dean's office.</p></br>
+					<p>5.	How can I report a problem related to the university’s functioning (e.g., technical or organizational)?</p></br>
+					<p>Problems can be reported directly to the appropriate departments or by contacting the administration.</p></br>
+					<p>6.	What is the process for submitting requests to the university authorities, e.g., to extend an exam deadline?</p></br>
+					<p>Requests should be submitted to the dean's office or directly to the relevant faculty authorities. Documents require justification and possibly certificates (e.g., medical). The decision is made by the dean or a committee.</p></br>
+					<p>7.	What are the start and end dates of the semester and exam sessions?</p></br>
+					<p>The start and end dates of the semester and exam sessions are set by the university authorities and are available in the academic calendar, which is published on the university’s website at the beginning of the academic year.</p></br>
+					
+					
+					</section>
+				
                 <a href="files/general_organisation.pdf" target="_blank">Download: General Organisation (PDF)</a>
             </div>
+			<!-- zakładka -->
             <div id="scholarships" class="file-section">
                 <h3>Scholarships</h3>
                 <p>Details about available scholarships and how to apply.</p>
+				
+					<li><a href="#types_of_scholaships">Types of scholarships</a></li>
+					<li><a href="#scholarship_guidlines">Guidelines</a></li>
+					
+					<section id="types_of_scholaships" class="section">
+					<h1>Types of scholarships</h1>
+					</section>
+					
+					<section id="scholarship_guidlines" class="section">
+					<h1>Scholarship guidelines</h1>
+					<p>1.	What scholarships are available for students?</p></br>
+					<p>Available scholarships include social, academic, rector’s, sports, and scholarships for students with disabilities. Detailed information is available on the university website or at the dean's office.</p></br>
+					<p>2.	What documents are required to apply for a social scholarship?</p></br>
+					<p>Required documents include, among others, a certificate of family income, a certificate of family size, and other documents confirming the financial situation (e.g., administrative decisions, tax returns).</p></br>
+					<p>3.	What are the criteria for awarding an academic scholarship?</p></br>
+					<p>An academic scholarship is awarded based on academic results, typically based on the average grade from the previous semester and academic achievements. The required average grade may vary depending on the faculty.</p></br>
+					<p>4.	When and where are scholarship funds paid?</p></br>
+					<p>Scholarships are paid to students' bank accounts, usually at the beginning of each month. Details about payments can be found in announcements on the university website.</p></br>
+					<p>5.	Are scholarships available for part-time students?</p></br>
+					<p>Yes, scholarships are available for part-time students as well, although some types of scholarships may have additional criteria related to the study format.</p></br>
+					<p>6.	How can I check the status of my scholarship application?</p></br>
+					<p>Information about the status of your application is sent directly to the student’s email address.</p></br>
+					<p>7.	Can I appeal the decision regarding my scholarship application?</p></br>
+					<p>Yes, you can appeal the decision regarding the granting or denial of a scholarship within the time specified in the scholarship regulations. Appeals are submitted to the scholarship committee.</p></br>
+
+					
+					</section>
+				
                 <a href="files/scholarships.pdf" target="_blank">Download: Scholarships Information (PDF)</a>
             </div>
-            <div id="exams" class="file-section">
-                <h3>Exams & Grading</h3>
-                <p>Understand the university's examination and grading policies.</p>
+			<!-- zakładka -->
+            <div id="admissions" class="file-section">
+                <h3>Admissions</h3>
+                <p>Understand the university's admissions policies.</p>
+				
+					<li><a href="#application_process">Application Process</a></li>
+					<li><a href="#important_dates">Important Dates</a></li>
+				
+					<section id="application_process" class="section">
+					<h1>Application Process</h1>
+					</section>
+					
+					<section id="important_dates" class="section">
+					<h1>Important Dates</h1>
+					</section>
+				
                 <a href="files/exams_grading.pdf" target="_blank">Download: Exams & Grading Policies (PDF)</a>
             </div>
+			<!-- zakładka -->
             <div id="housing" class="file-section">
                 <h3>Student Housing</h3>
                 <p>Information about on-campus and off-campus housing options.</p>
+					<li><a href="#housing_info">Housing information</a></li>
+				
+					<section id="housing_info" class="section">
+					<h1>Housing info</h1>
+					
+					<p>1.	How can I apply for a dormitory place?</p></br>
+					<p>To apply for a dormitory place, you need to submit an application within the specified deadline, which is announced at the beginning of each academic year. Applications are made online or through a paper form.</p></br>
+					<p>2.	What are the criteria for assigning dormitory places?</p></br>
+					<p>Dormitory places are assigned based on criteria such as family income per person, grade point average, and the student's life situation (e.g., place of residence).</p></br>
+					<p>3.	Is it possible to change rooms during the semester?</p></br>
+					<p>Room changes during the semester are possible but require justification (e.g., health or technical problems). The decision is made by the dormitory administration.</p></br>
+					<p>4.	What are the rules regarding guest visits in the dormitories?</p></br>
+					<p>Guest visits are allowed during specific hours, with adherence to rules regarding order and quiet hours. Details can be found in the dormitory regulations.</p></br>
+					<p>5.	What amenities are available in the dormitories (e.g., internet, laundry)?</p></br>
+					<p>Dormitories offer internet access, laundry facilities, shared kitchens, and other amenities.</p></br>
+					<p>6.	What are the accommodation fees, and what are the payment methods?</p></br>
+					<p>Accommodation fees vary depending on the dormitory. Payments are typically made per semester, and payments can be made via bank transfer or in cash at the administration office.</p></br>
+					<p>7.	What should I do in case of technical problems in the dormitory, such as a breakdown?</p></br>
+					<p>In case of technical problems, you should report them to the dormitory administration, which handles repairs. Breakdowns can be reported in person or by phone.</p></br>
+					<p>8.	Does the university offer assistance in finding accommodation outside of the dormitory?</p></br>
+					<p>The university does not provide direct accommodation outside of the dormitory but can offer information about available rental offers in the area.</p></br>
+
+					
+					</section>
+				
                 <a href="files/student_housing.pdf" target="_blank">Download: Student Housing Guide (PDF)</a>
             </div>
-            <div id="events" class="file-section">
-                <h3>Events & Activities</h3>
-                <p>Explore upcoming university events and student activities.</p>
+			<!-- zakładka -->
+            <div id="organisations" class="file-section">
+                <h3>Student Organisations</h3>
+				
+					<li><a href="#organisation_template">template_organisation</a></li>
+				
+					<section id="organisation_template" class="section">
+					<h1>template, do for each Organisation</h1>
+					</section>
+                <p>Explore the organisations and activities taking place on the university.</p>
                 <a href="files/events_activities.pdf" target="_blank">Download: Events & Activities (PDF)</a>
+            </div>
+			<!-- zakładka -->
+			<div id="map" class="file-section">
+                <h3>Map</h3>
+                <p>Look at the university map</p>
+                <a href="https://mapa.p.lodz.pl/" target="_blank">Link to the map</a>
+            </div>
+			<!-- zakładka -->
+			<div id="services" class="file-section">
+                <h3>Services</h3>
+                <p>Find about univesity services</p>
+					<li><a href="#library">Library</a></li>
+					<li><a href="#it_help">IT help</a></li>
+					<li><a href="#health_and_counseling">Health and counseling</a></li>
+				
+					<section id="library" class="section">
+					<h1>Library</h1>
+					</section>
+					
+					<section id="it_help" class="section">
+					<h1>IT help</h1>
+					</section>
+					
+					<section id="health_and_counseling" class="section">
+					<h1>Health and counseling</h1>
+					</section>
             </div>
         </div>
     </div>
