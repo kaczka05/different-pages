@@ -23,6 +23,7 @@
             padding: 20px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease-in-out;
+            z-index: 1000;
         }
         .sidebar h2 {
             margin: 0 0 20px;
@@ -79,12 +80,12 @@
                 top: 0;
                 left: 0;
                 height: 100%;
-                transform: translateX(-100%);
+                transform: translateX(0); /* Sidebar is initially visible */
                 background-color: #960d03;
                 z-index: 1000;
             }
-            .sidebar.active {
-                transform: translateX(0);
+            .sidebar.hide {
+                transform: translateX(-100%); /* Hide sidebar on mobile */
             }
             .menu-button {
                 display: block;
@@ -100,9 +101,6 @@
                 text-align: center;
                 z-index: 2000;
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            }
-            .menu-button {
-                display: block;
             }
         }
 
@@ -131,16 +129,22 @@
                 selectedSection.style.display = 'block';
             }
 
-            // Hide the sidebar if in mobile view
+            // Hide the sidebar after selection, but only on mobile
             if (window.innerWidth <= 768) {
-                document.querySelector('.sidebar').classList.remove('active');
+                document.querySelector('.sidebar').classList.add('hide');
                 document.querySelector('.menu-button').style.display = 'block'; // Show the menu toggle button
             }
         }
 
         function toggleMenu() {
             const sidebar = document.querySelector('.sidebar');
-            sidebar.classList.toggle('active');
+            sidebar.classList.toggle('hide'); // Toggle the sidebar visibility
+            const button = document.querySelector('.menu-button');
+            if (sidebar.classList.contains('hide')) {
+                button.style.display = 'block'; // Show the menu button when the sidebar is hidden
+            } else {
+                button.style.display = 'none'; // Hide the menu button when the sidebar is open
+            }
         }
     </script>
 </head>
