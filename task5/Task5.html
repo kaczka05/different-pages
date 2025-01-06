@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS System and Mail System</title>
+</head>
+<body>
+    <h1>DNS System and Mail System Overview</h1>
+    <p>A detailed explanation of DNS and Mail Systems</p>
+
+    <h2>1. DNS System</h2>
+
+    <h3>1.1.1. List of Top Level Domains</h3>
+    <ul>
+        <li>.com - Commercial</li>
+        <li>.org - Organizations</li>
+        <li>.net - Network</li>
+        <li>.gov - Government</li>
+        <li>.edu - Education</li>
+        <li>.mil - Military</li>
+        <li>.int - International</li>
+        <li>.info - Information</li>
+        <li>.biz - Business</li>
+		<li>.(ex. pl) - Country code</li>
+    </ul>
+
+    <h3>1.1.2. Hierarchical Structure of DNS</h3>
+    <p>DNS follows a hierarchical structure:</p>
+    <ul>
+        <li>Root Level (.): managed by root name servers</li>
+        <li>Top-Level Domains (TLDs) </li>
+        <li>Second-Level Domains: in www.example.com example is a second level domain</li>
+        <li>Subdomains:  sections of main domain in www.payments.PKO.com payments would be subdomain</li>
+		<li>Hostnames: specific devise within the domain, for website it is usually www
+    </ul>
+    <h3>DNS Queries:</h3>
+		<p>After writing domain name the computer searches DNS cache for their adress, if it does not find it, it will send a querry to internet provider</p>
+		<p>Then DNS resolver of the provider will start looking for domain, it has acces to all top level domains and then go down in hierarchy until it finds the server with adress</p>
+		<p/>
+		<p>There is also an iterative querry where the DNS resolver asks all the queries </p>
+		<p>Here the resolver asks first top level domain server and when it returns a second level domain it asks the second level domain and so on </p>
+		<p>It makes so that the client takes more computing than servers</p>
+    <h3>DNS Delegation:</h3>
+	<p>When companies create subdomains, they often delegate the management of those subdomains to another DNS server. This is achieved by adding NS (Name Server) records to the parent domain. When someone queries the new subdomain, the DNS system directs the query to the designated authoritative server for that subdomain.</p>
+
+    <h3>1.1.3. DNS Records</h3>
+	<p>They are types of data stored in servers that allow response to specific queries</p>
+    <p>DNS records include:</p>
+    <ul>
+	  <li><strong>A Record (Address Record):</strong> Maps a domain name to an IPv4 address (e.g., example.com → 192.0.2.1).</li>
+	  <li><strong>AAAA Record:</strong> Maps a domain name to an IPv6 address instead of IPv4.</li>
+	  <li><strong>CNAME Record (Canonical Name):</strong> Creates an alias for a domain, pointing one domain to another (e.g., www.example.com → example.com).</li>
+	  <li><strong>MX Record (Mail Exchange):</strong> Specifies mail servers responsible for receiving emails for a domain.</li>
+	  <li><strong>TXT Record (Text Record):</strong> Stores text-based information for verification and security, such as SPF and DKIM.</li>
+	  <li><strong>NS Record (Name Server):</strong> Specifies the authoritative DNS servers for a domain.</li>
+	  <li><strong>SOA Record (Start of Authority):</strong> Contains administrative information like the primary DNS server and timing settings.</li>
+	  <li><strong>SRV Record (Service Record):</strong> Specifies the location (host and port) of specific services, such as SIP or VoIP.</li>
+	  <li><strong>PTR Record (Pointer Record):</strong> Used for reverse DNS lookups, mapping IP addresses back to domain names.</li>
+	  <li><strong>CAA Record (Certificate Authority Authorization):</strong> Controls which certificate authorities are allowed to issue SSL/TLS certificates for the domain.</li>
+	  <li><strong>DNSSEC Records:</strong> Provide security for DNS by verifying that records are authentic. </li>
+	</ul>
+	<h3>1.1.3+ Security and DNSSEC</h3>
+	<p>DNS security works on public/private keys and a "chain of trust" in which the root server contains the public key trusted by everyone, root gives signature to TLD's depending on content, they have a public key and siganture of their own and so on.</p>
+	<p>DNSSEC introduces 2 new Records DS and RRSIG which are</p>
+	<ul>
+	 <li><strong>RRSIG Record :</strong> Contains private key for signing files and sigantures with methods of its generation and expiration date.</li>
+	  <li><strong>DNSSEC Record :</strong> Contains public key which is used to recognise domains or files signed by the domain and signature of parent domain which proofs autenticity of the domain.</li>
+	  <li><strong>DS Record :</strong> Contains a hashed public key of domain's child, allowing it to quickly verify it's identity</li>
+	</ul>
+    <h3>1.1.4. Authoritative and Non-Authoritative Answers</h3>
+    <p><strong>Authoritative Answer:</strong> Provided by the name server that holds the official DNS records.</p>
+    <p><strong>Non-Authoritative Answer:</strong> Provided by DNS resolvers, often from cached results.</p>
+
+    <h3>1.1.5. DNS Resolver, Cache, and /etc/hosts</h3>
+    <p><strong>DNS Resolver:</strong> Resolves domain names to IP addresses, the slowest.</p>
+    <p><strong>DNS Cache:</strong> Stores previously queried results to speed up DNS resolution, is cleared after some time, quite fast.</p>
+    <p><strong>/etc/hosts File:</strong> A local file used to map domain names to IP addresses before querying DNS, the fastest.</p>
+	
+    <h2>2. Mail System</h2>
+
+    <h2>2.1.1. Mail Protocols</h3>
+    <h3>1. POP3 (Post Office Protocol version 3)</h3>
+    <p>POP3 is primarily used for retrieving emails from a remote mail server and typically deletes them from the server once downloaded to the client.</p>
+    
+    <h4>Basic POP3 Commands</h4>
+    <pre><code>
+USER <username>       - Starts the login process, where <username> is the user's login name.
+PASS <password>       - The password used to authenticate the user.
+STAT                  - Returns the number of messages and total size in the mailbox.
+LIST                  - Lists all the messages with their IDs and sizes.
+RETR <message number> - Retrieves a specific message.
+DELE <message number> - Deletes a specific message from the server.
+QUIT                  - Ends the session and logs out.
+    </code></pre>
+
+    <h4>Example POP3 Communication</h4>
+    <pre><code>
+1. Client connects to the server.
+2. Client sends: USER <username> and PASS <password>.
+3. Server responds with a success message.
+4. Client retrieves messages using: RETR <message number>.
+5. Client deletes the message from the server using: DELE <message number>.
+    </code></pre>
+
+    <h3>2. IMAP (Internet Message Access Protocol)</h3>
+    <p>IMAP allows for full synchronization with the server, enabling users to manage emails across multiple devices without downloading or deleting them from the server.</p>
+
+    <h4>Basic IMAP Commands</h4>
+    <pre><code>
+USER <username>           - Begins the login process.
+PASS <password>           - Provides the password for authentication.
+SELECT <mailbox>          - Selects a specific mailbox (e.g., INBOX).
+FETCH <message number>    - Fetches specific messages or parts of messages.
+STORE <message number> +FLAGS (\Seen) - Marks a message as read.
+SEARCH <criteria>         - Searches for emails based on criteria.
+EXAMINE <mailbox>         - Opens a mailbox in read-only mode.
+LOGOUT                    - Logs out of the server.
+    </code></pre>
+
+    <h4>Example IMAP Communication</h4>
+    <pre><code>
+1. Client connects to the server.
+2. Client sends: USER <username> and PASS <password>.
+3. Client selects the INBOX with: SELECT INBOX.
+4. Client retrieves messages using: FETCH <message number>.
+5. Client manages flags with: STORE +FLAGS (\Seen) to mark a message as read.
+    </code></pre>
+
+    <h3>3. SMTP (Simple Mail Transfer Protocol)</h3>
+    <p>SMTP is used for sending emails from a client to a server or between servers. It does not handle incoming mail (that’s POP3 or IMAP’s job).</p>
+
+    <h4>Basic SMTP Commands</h4>
+    <pre><code>
+HELO <domain>          - Starts the communication session and introduces the sending mail server.
+MAIL FROM:<email>      - Specifies the sender's email address.
+RCPT TO:<email>       - Specifies the recipient's email address.
+DATA                   - Begins the transmission of the email body.
+QUIT                   - Ends the SMTP session.
+RSET                   - Resets the session in case of errors.
+    </code></pre>
+
+    <h4>Example SMTP Communication</h4>
+    <pre><code>
+1. Client connects to the SMTP server.
+2. Client sends: HELO <domain> to introduce itself.
+3. Client specifies the sender with: MAIL FROM:<email>.
+4. Client specifies the recipient with: RCPT TO:<email>.
+5. Client sends the email body using: DATA.
+6. Server acknowledges the message and delivers it or queues it for later.
+    </code></pre>
+
+    <h3>2.1.2. NNTP Protocol</h3>
+    <p>Network News Transfer Protocol (NNTP) is used to read and post newsgroup articles. They have a structure similar to Email but are intendet to be used by groups of people, largely obsolete.</p>
+
+    <h3>2.1.3. E-mail Mailbox</h3>
+	<p>An email mailbox is a logical container for storing messages that are sent or received by a user. In simple terms, it's where emails are kept, and it can exist in different forms depending on how it's configured and accessed.</p>
+    <p><strong>Parameters:</strong> Name, email address, type(IMAP or POP3), permission(read, write, admin) and mailbox quota(amount of mails an Mailbox can hold).</p>
+    <p><strong>Aliases:</strong> E-mail adress that redirects recieved mail to designated Mailboxes, can be created and destroyed without affecting users</p>
+	<p><strong>Catch-All Adresses:</strong> They are specific adresses that are used to get all mail in domain sent to non existing users.</p>
+	<p><strong>Subadressing:</strong> Specific variation of adresses that can filter mail to specific folders</p>
+	<p><strong>Adress structure:</strong> Adresses must have a local and domain part like local@domain.TLD wit domain having at least one dot</p>
+	
+    <h3>2.1.4. E-mail Structure</h3>
+    <h3>Email Structure Overview</h3>
+    <ul>
+        <li><strong>Headers</strong>: Metadata that helps route and identify the email (e.g., From, To, Subject).</li>
+        <li><strong>Body</strong>: The main content of the email, which can be plain text or HTML.</li>
+        <li><strong>Attachments</strong>: Files sent along with the email.</li>
+        <li><strong>MIME</strong>: Allows for more complex email structures, including mixed content like text and attachments.</li>
+        <li><strong>Signature</strong>: A block of text appended at the end of the email, often containing contact info.</li>
+    </ul>
+	<h3>Email Headers Overview</h3>
+    <ul>
+        <li><strong>From</strong>: Specifies the sender’s email address.</li>
+        <li><strong>To</strong>: Specifies the recipient’s email address (or addresses).</li>
+        <li><strong>Cc</strong> (Carbon Copy): Specifies secondary recipients who are also sent the email.</li>
+        <li><strong>Bcc</strong> (Blind Carbon Copy): Similar to Cc, but recipients in this field are hidden from the others.</li>
+        <li><strong>Subject</strong>: A brief description or title of the email's content.</li>
+        <li><strong>Date</strong>: The timestamp of when the email was sent.</li>
+        <li><strong>Message-ID</strong>: A unique identifier for the email.</li>
+        <li><strong>Reply-To</strong>: Specifies the address to which replies should be sent (if different from From).</li>
+        <li><strong>Return-Path</strong>: The address to which bounce-back messages should be sent.</li>
+    </ul>
+    <h3>2.1.5. Attachments and MIME</h3>
+    <p><strong>MIME:</strong> Multipurpose Internet Mail Extensions allow attachments like documents, images, and more by encoding them to text format acceptable by mailing protocols.</p>
+
+    <h3>2.1.6. Mailing Lists and E-mail Gate</h3>
+    <p>Mailing lists allow sending emails to multiple users and moderate it for content or to add some headers. Email gates allow to modify emails going in and out of network for archiving, security or to change from one protocol to other.</p>
+
+    <h3>2.1.7. E-mail Security</h3>
+    <p>Common security protocols:</p>
+    <ul>
+        <li><strong>TLS:</strong> Encrypts email communication by first checking the servers certificate and then making both machines agree on used protocol version, encryption algorithm and finally key used for comunication.</li>
+		<li><strong>STARTTLS:</strong> Protocol used to enable TLS connection during transmission, requiers to be supported, used with plain text protocols</li>
+        <li><strong>PGP:</strong> Encrypts emails contents using recipients keys, requires specialised software but encryption used is localised</li>
+		<li><strong>S/MIME:</strong> Encrypts emails contents with keys based on Certificates, embeded in most systems but encription is centralised</li>
+		
+    </ul>
+
+    <h3>2.1.8. Spam and Filtering</h3>
+	<h3>SpamAssassin (Spam Filtering Software)</h3>
+	<p><strong>Apache SpamAssassin</strong> is one of the most widely used open-source spam filtering systems.</p>
+	<p><strong>How SpamAssassin Works:</strong></p>
+	<ul>
+		<li><strong>Rule-Based Scoring:</strong> SpamAssassin uses a scoring system to evaluate an email's likelihood of being spam. It checks for specific patterns like keywords, formatting, and suspicious links.</li>
+		<li><strong>Bayesian Filtering:</strong> A statistical model based on "good" vs. "spam" email. It learns over time from user input and adapts to new spam trends.</li>
+		<li><strong>RBL Checks:</strong> SpamAssassin queries <strong>Realtime Blackhole Lists (RBL)</strong> to identify sender IP addresses associated with spam.</li>
+		<li><strong>Header and Content Analysis:</strong> It analyzes email headers (e.g., sender information) and body content for suspicious patterns or indicators.</li>
+		<li><strong>DNSBL (DNS-based Blacklists):</strong> Checks DNS-based blacklists to identify IPs/domains linked to spam.</li>
+		<li><strong>SpamAssassin Rules:</strong> Administrators can define custom rules to suit their environment for spam detection.</li>
+	</ul>
+
+	<h3>Postfix + Amavis (Spam and Malware Gateway)</h3>
+	<p><strong>Postfix</strong> is a popular mail transfer agent (MTA), and <strong>Amavis</strong> is a content filter often used alongside SpamAssassin for spam and malware detection.</p>
+	<p><strong>How Postfix + Amavis Work:</strong></p>
+	<ul>
+		<li><strong>Content Inspection:</strong> Postfix receives an email and hands it over to Amavis for inspection.</li>
+		<li><strong>Integration with Antivirus:</strong> Amavis integrates with antivirus engines to detect malware or suspicious attachments.</li>
+		<li><strong>Spam Filtering:</strong> Amavis uses SpamAssassin for spam analysis.</li>
+		<li><strong>Policy Enforcement:</strong> Administrators can define rules for quarantining, rejecting, or tagging spam/malware emails.</li>
+	</ul>
+
+	<h3>RBL and DNSBL Services</h3>
+	<p><strong>RBL</strong> (Realtime Blackhole List) and <strong>DNSBL</strong> (DNS-based Blacklist) are databases of IP addresses or domains associated with spam or malware.</p>
+	<p><strong>How DNSBL Works:</strong></p>
+	<ul>
+		<li>The mail server extracts the sender’s IP address upon receiving an email.</li>
+		<li>The server queries the DNSBL service to check the sender's IP against the blacklist.</li>
+		<li>If the IP is blacklisted, the email can be rejected, flagged, or filtered.</li>
+	</ul>
+	<p>Popular DNSBL services track and manage lists of suspicious IPs or domains, aiding in efficient spam filtering.</p>
+
+	<h3>ClamAV (Malware Scanning Software)</h3>
+	<p><strong>ClamAV</strong> is an open-source antivirus engine used to scan email attachments for malware.</p>
+	<p><strong>How ClamAV Works:</strong></p>
+	<ul>
+		<li><strong>Signature-Based Detection:</strong> ClamAV uses a database of known malware signatures to detect threats in email attachments.</li>
+		<li><strong>Integration:</strong> It works alongside tools like Amavis or SpamAssassin to analyze incoming emails.</li>
+		<li><strong>Real-Time Scanning:</strong> The software scans files (e.g., attachments) as they pass through the server.</li>
+	</ul>
+
+	<h3>Protocols and Techniques Supporting Spam and Malware Filtering</h3>
+	<p>Various protocols and techniques support email validation and reduce spam:</p>
+	<ul>
+		<li><strong>SPF (Sender Policy Framework):</strong> Ensures that an email is sent from an IP address authorized by the domain owner. Mail servers check the sender’s SPF record to verify legitimacy.</li>
+		<li><strong>DKIM (DomainKeys Identified Mail):</strong> Allows the sender to attach a digital signature to emails, verifying that the message hasn’t been tampered with.</li>
+		<li><strong>DMARC (Domain-based Message Authentication, Reporting & Conformance):</strong> Combines SPF and DKIM to provide email validation and policy enforcement. DMARC helps mail servers determine how to handle emails failing SPF or DKIM checks.</li>
+	</ul>
+		<p><strong>Graylists:</strong> Temporarily reject emails to verify legitimacy.</p>
+			<ul>
+	  <li><strong>Temporary Rejection:</strong> When an email server receives a message from an unfamiliar or unknown sender, the server initially rejects the email with a temporary failure message (typically a 4xx error code in the SMTP protocol). This is not a permanent rejection, but rather a "delay" tactic.</li>
+	  
+	  <li><strong>Wait and Retry Mechanism:</strong> Legitimate mail servers are designed to retry sending the email if they receive a temporary failure. These retries usually occur within minutes to hours after the initial rejection.</li>
+	  
+	  <li><strong>Tracking and Whitelisting:</strong> The graylist maintains a record of senders that have been temporarily rejected and their retry attempts. If the same email server tries to send an email again within a certain time frame (usually a few minutes to hours), the graylist will allow the email to pass through. This retry process helps confirm that the sender is legitimate.</li>
+	  
+	  <li><strong>Spam Prevention:</strong> Most spam-sending servers do not retry sending messages if they are initially rejected. These servers tend to send a bulk of messages in one attempt and do not have the retry functionality that legitimate mail servers do. As a result, graylisting helps block a significant amount of spam by delaying it, while allowing legitimate messages to get through after retrying.</li>
+	</ul>
+	
+	<h2>Practical Part</h2>
+
+<h3>2.1. DNS System</h3>
+
+<h4>2.1.1. Display DNS Settings</h4>
+<p>The DNS settings were displayed on the computer using Control Panel and <code>ipconfig</code>. Below are screenshots showing the original DNS settings and the updated settings after changing to Google's DNS server:</p>
+<img src="1.1.png" alt="Original DNS Settings" />
+<img src="1.2.png" alt="Changed DNS Settings to Google's DNS" />
+<img src="1.3.png" alt="Verifying DNS Settings Change" />
+
+<h4>2.1.2. Using DNS Tools</h4>
+<ul>
+    
+    <img src="2.1.png" alt="Domain Names and IPs for lodz.pl" />
+    
+    <img src="3.1.png" alt="DNS Settings for European Computer" />
+    
+    <img src="4.1.png" alt="DNS Settings for Non-European Computer" />
+    
+    <img src="5.1.png" alt="DNS Assignment for localhost" />
+    
+    <img src="6.1.png" alt="Flushing DNS Cache" />
+</ul>
+
+<h3>2.2. Mail System</h3>
+
+<h4>2.2.1. Configuring Thunderbird</h4>
+<p>Thunderbird was configured to send and receive emails from <code>studife.it.p.lodz.pl</code>. (See screenshot below)</p>
+<img src="task2.1.png" alt="Thunderbird Configuration" />
+
+<h4>2.2.2. Sending Emails to Specific Scenarios</h4>
+<ul>
+    
+    <img src="task2.2.png" alt="Error for Non-existent Mail Server" />
+   
+    <img src="task2.3.png" alt="Error for Non-existent User" />
+   
+    <img src="task2.4.png" alt="Error for Non-email Server" />
+</ul>
+
+<h4>2.2.3. Analyzing Email Traffic with Wireshark</h4>
+<p>The process of sending and receiving emails using Thunderbird was captured and analyzed in Wireshark. </p>
+<img src="task2.5.png" alt="Wireshark Analysis of Email Traffic" />
+
+<h4>2.2.4. Sending and Receiving Emails Using Telnet</h4>
+<p>Emails were sent and received using <code>telnet</code>, connecting to both SMTP and POP3 servers. The process and results are detailed in the screenshots below:</p>
+<ul>
+    
+    <img src="task2.6.png" alt="SMTP Connection with Telnet" />
+    
+    <img src="task2.7.png" alt="Sending Email with Telnet SMTP" />
+    
+    <img src="task2.8.png" alt="Receiving Email with Telnet POP3" />
+    <
+    <img src="task2.9.png" alt="Closing Telnet Connection" />
+</ul>
+
+</body>
+</html>
