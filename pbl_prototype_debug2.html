@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poliinfo</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #960d03; /* Red */
+            color: #ffffff;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: block;
+        }
+        .sidebar h2 {
+            margin: 0 0 20px;
+            font-size: 20px;
+            text-align: center;
+        }
+        .menu {
+            list-style: none;
+            padding: 0;
+        }
+        .menu li {
+            margin-bottom: 10px;
+        }
+        .menu a {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .menu a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .file-section {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .file-section h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .file-section p {
+            margin: 5px 0;
+        }
+        .file-section a {
+            color: #960d03;
+            text-decoration: none;
+        }
+        .file-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile specific styles */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                display: none;
+            }
+            .sidebar.active {
+                display: block;
+            }
+            .menu-button {
+                display: block;
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                background-color: #960d03;
+                color: #ffffff;
+                border: none;
+                padding: 10px;
+                font-size: 16px;
+                cursor: pointer;
+                text-align: center;
+                z-index: 1000;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        .menu-button {
+            display: none;
+        }
+
+        .section {
+            padding: 1rem 1.5rem;
+            max-width: 1200px;
+            margin: 1rem;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script>
+        function showContent(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.file-section');
+            sections.forEach(section => section.style.display = 'none');
+
+            // Show the selected section
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.style.display = 'block';
+            }
+
+            // Hide the sidebar if in mobile view
+            if (window.innerWidth <= 768) {
+                document.querySelector('.sidebar').classList.remove('active');
+            }
+        }
+
+        function toggleMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <button class="menu-button" onclick="toggleMenu()">Menu</button>
+        <div class="sidebar">
+            <h2>Politechnika Łódzka</h2>
+            <ul class="menu">
+                <li><a onclick="showContent('general')">General Organisation</a></li>
+                <li><a onclick="showContent('scholarships')">Scholarships</a></li>
+                <li><a onclick="showContent('admissions')">Admissions</a></li>
+                <li><a onclick="showContent('housing')">Student Housing</a></li>
+                <li><a onclick="showContent('organisations')">Student Organisations</a></li>
+                <li><a onclick="showContent('map')">Campus map</a></li>
+                <li><a onclick="showContent('services')">Services</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <!-- zakładka -->
+            <div id="general" class="file-section">
+                <h3>General Organisation</h3>
+                <p>Learn about the university's organisational structure, departments, and administrative contacts.</p>
+                <li><a href="#aktualnosci">Aktualności</a></li>
+                <section id="aktualnosci" class="section">
+                    <h1>Aktualności</h1>
+                    <p>1. What are the office hours of the dean's office and where is it located?</p></br>
+                    <p>Office hours vary depending on the faculty. Generally, they are weekdays from 8:00 AM to 4:00 PM. Detailed information about office hours and the location of the dean's office can be found on the university website or directly on the dean's office door.</p></br>
+                    <p>2. How can I obtain a certificate of enrollment?</p></br>
+                    <p>You can obtain a certificate of enrollment by submitting a request to the dean's office. Certificates are typically issued within a few working days.</p></br>
+                    <!-- Add more content here -->
+                </section>
+                <a href="files/general_organisation.pdf" target="_blank">Download: General Organisation (PDF)</a>
+            </div>
+            <!-- zakładka -->
+            <div id="scholarships" class="file-section">
+                <h3>Scholarships</h3>
+                <p>Details about available scholarships and how to apply.</p>
+                <li><a href="#types_of_scholaships">Types of scholarships</a></li>
+                <li><a href="#scholarship_guidlines">Guidelines</a></li>
+                <section id="types_of_scholaships" class="section">
+                    <h1>Types of scholarships</h1>
+                    <p>Students at the Lodz University of Technology can apply for financial assistance in the form of:</p>
+                    <li>social scholarship</li>
+                    <li>scholarship for disabled people</li>
+                    <li>financial aid</li>
+                    <li>rector's scholarship</li>
+                </section>
+                <section id="scholarship_guidlines" class="section">
+                    <h1>Scholarship guidelines</h1>
+                    <p>1. What scholarships are available for students?</p></br>
+                    <p>Available scholarships include social, academic, rector’s, sports, and scholarships for students with disabilities. Detailed information is available on the university website or at the dean's office.</p></br>
+                    <p>2. What documents are required to apply for a social scholarship?</p></br>
+                    <p>Required documents include, among others, a certificate of family income, a certificate of family size, and other documents confirming the financial situation (e.g., administrative decisions, tax returns).</p></br>
+                    <!-- Add more content here -->
+                </section>
+                <a href="files/scholarships.pdf" target="_blank">Download: Scholarships Information (PDF)</a>
+            </div>
+            <!-- zakładka -->
+            <div id="admissions" class="file-section">
+                <h3>Admissions</h3>
+                <p>Understand the university's admissions policies.</p>
+                <li><a href="#application_process">Application Process</a></li>
+                <li><a href="#important_dates">Important Dates</a></li>
+                <section id="application_process" class="section">
+                    <h1>Application Process</h1>
+                </section>
+                <section id="important_dates" class="section">
+                    <h1>Important Dates</h1>
+                </section>
+                <a href="files/exams_grading.pdf" target="_blank">Download: Exams & Grading Policies (PDF)</a>
+            </div>
+            <!-- Add additional content here -->
+        </div>
+    </div>
+</body>
+</html>
