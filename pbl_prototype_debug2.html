@@ -108,6 +108,16 @@
             border-radius: 10px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
+
+        /* Search bar style */
+        .search-bar {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
     </style>
     <script>
         function showContent(sectionId) {
@@ -131,9 +141,35 @@
             const sidebar = document.querySelector('.sidebar');
             sidebar.classList.toggle('active');
         }
+
+        function searchSection() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const sections = document.querySelectorAll('.file-section');
+            let found = false;
+
+            sections.forEach(section => {
+                const sectionTitle = section.querySelector('h3').textContent.toLowerCase();
+                if (sectionTitle.includes(searchTerm)) {
+                    section.style.display = 'block';
+                    section.scrollIntoView({ behavior: 'smooth' }); // Scroll to the section
+                    found = true;
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+
+            if (!found) {
+                alert('No matching section found!');
+            }
+        }
     </script>
 </head>
 <body>
+    <!-- Search Bar at the top of the page -->
+    <div>
+        <input type="text" id="search-input" class="search-bar" placeholder="Search sections..." onkeyup="searchSection()">
+    </div>
+
     <div class="container">
         <button class="menu-button" onclick="toggleMenu()">Menu</button>
         <div class="sidebar">
