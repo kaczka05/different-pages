@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width: initial-scale=1.0">
     <title>Car Game with Menu</title>
     <style>
         body {
@@ -14,7 +14,7 @@
             display: block;
             background-color: rgba(0, 0, 0, 0.8);
         }
-        #menu, #carSelection {
+        #menu, #carSelection, #gameOverScreen {
             position: absolute;
             top: 0;
             left: 0;
@@ -68,6 +68,21 @@
         .stats span {
             margin: 2px 0;
         }
+        #gameInfo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 18px;
+            z-index: 10;
+        }
+        #gameOverScreen {
+            display: none;
+        }
+        #medalSVG {
+            width: 200px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -82,6 +97,17 @@
     </div>
 
     <canvas id="gameCanvas" style="display: none;"></canvas>
+    <div id="gameInfo">
+        <p>Time: <span id="timeDisplay">0</span> seconds</p>
+        <p>Laps: <span id="lapCount">0</span></p>
+    </div>
+
+    <div id="gameOverScreen">
+        <h2>Game Over</h2>
+        <p>Average Speed: <span id="avgSpeedDisplay"></span></p>
+        <div id="medalSVG"></div>
+        <button id="restartButton">Restart</button>
+    </div>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
@@ -135,11 +161,19 @@
         ];
 
         let selectedCar;
+        let startTime, elapsedTime = 0, lapCount = 0, totalSpeed = 0, isLapComplete = false;
+        let lastLapTime = 0;
 
         const menu = document.getElementById("menu");
         const carSelection = document.getElementById("carSelection");
         const carOptions = document.getElementById("carOptions");
         const playButton = document.getElementById("playButton");
+        const timeDisplay = document.getElementById("timeDisplay");
+        const lapCountDisplay = document.getElementById("lapCount");
+        const gameOverScreen = document.getElementById("gameOverScreen");
+        const avgSpeedDisplay = document.getElementById("avgSpeedDisplay");
+        const medalSVG = document.getElementById("medalSVG");
+        const restartButton = document.getElementById("restartButton");
 
         playButton.addEventListener("click", () => {
             menu.style.display = "none";
@@ -178,6 +212,7 @@
         function startGame() {
             carSelection.style.display = "none";
             canvas.style.display = "block";
+            gameOverScreen.style.display = "none";
             initGame(selectedCar);
         }
 
@@ -192,9 +227,10 @@
             };
 
             const racetrackImage = new Image();
-            racetrackImage.src = "racetrack.svg"; // Ensure this path is correct
+            racetrackImage.src = "racetrack2.svg"; // Ensure this path is correct
             racetrackImage.onload = () => {
                 console.log("Racetrack image loaded successfully.");
+                startTime = Date.now(); // Initialize start time
                 animateGame(carImage, racetrackImage);
             };
             racetrackImage.onerror = (error) => {
@@ -241,22 +277,63 @@
                 if (controller[e.key]) controller[e.key].pressed = false;
             });
 
+            const startX = canvas.width / 2;
+            const startY = canvas.height / 2;
+            let distanceTraveled = 0;
+
             function updateCar() {
-                Object.values(controller).forEach(ctrl => {
-                    if (ctrl.pressed) ctrl.func();
-                });
+    if (lapCount >= 10) {
+        // Freeze the car when 10 laps are done
+        return;
+    }
 
-                carData.angularVelocity *= carConstants.frictionFactor;
-                carData.driftAngle += carConstants.driftFactor * carData.angularVelocity;
-                carData.driftAngle *= carConstants.frictionFactor;
-                carData.angle += carData.angularVelocity;
-                carData.speed *= carConstants.dragFactor;
+    Object.values(controller).forEach(ctrl => {
+        if (ctrl.pressed) ctrl.func();
+    });
 
-                carData.xSpeed = Math.sin(carData.angle - carData.driftAngle) * carData.speed;
-                carData.ySpeed = Math.cos(carData.angle - carData.driftAngle) * carData.speed;
+    carData.angularVelocity *= carConstants.frictionFactor;
+    carData.driftAngle += carConstants.driftFactor * carData.angularVelocity;
+    carData.driftAngle *= carConstants.frictionFactor;
+    carData.angle += carData.angularVelocity;
+    carData.speed *= carConstants.dragFactor;
 
-                carData.xPos += carData.xSpeed;
-                carData.yPos -= carData.ySpeed;
+    carData.xSpeed = Math.sin(carData.angle - carData.driftAngle) * carData.speed;
+    carData.ySpeed = Math.cos(carData.angle - carData.driftAngle) * carData.speed;
+
+    // Update the car's position
+    carData.xPos += carData.xSpeed;
+    carData.yPos -= carData.ySpeed;
+
+    // Boundary check: Keep the car inside the canvas
+    if (carData.xPos > canvas.width - 25) {
+        carData.xPos = canvas.width - 25; // Don't let the car move past the right edge
+    }
+    if (carData.xPos < 25) {
+        carData.xPos = 25; // Don't let the car move past the left edge
+    }
+    if (carData.yPos > canvas.height - 50) {
+        carData.yPos = canvas.height - 50; // Don't let the car move past the bottom edge
+    }
+    if (carData.yPos < 50) {
+        carData.yPos = 50; // Don't let the car move past the top edge
+    }
+
+    // Calculate the distance from the starting point
+    distanceTraveled = Math.sqrt(Math.pow(carData.xPos - startX, 2) + Math.pow(carData.yPos - startY, 2));
+
+    // Lap completion condition: The car must travel at least 300px away from the start point
+    if (!isLapComplete && distanceTraveled >= 500) {
+        isLapComplete = true;
+    }
+
+    // Complete the lap once the car returns within 100px of the starting position
+    if (isLapComplete && distanceTraveled <= 100) {
+        lapCount++;
+        totalSpeed += carData.speed;
+        lapCountDisplay.textContent = lapCount;
+        isLapComplete = false;
+    }
+
 
                 if (carData.xPos > canvas.width) carData.xPos = 0;
                 if (carData.xPos < 0) carData.xPos = canvas.width;
@@ -280,14 +357,81 @@
                 ctx.restore();
             }
 
-            function animate() {
-                updateCar();
-                renderCar();
-                requestAnimationFrame(animate);
+            function updateTimer() {
+                elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                timeDisplay.textContent = elapsedTime;
             }
 
-            animate();
+            function endGame() {
+                // Calculate average speed
+                const avgSpeed = totalSpeed / lapCount;
+                avgSpeedDisplay.textContent = avgSpeed.toFixed(2);
+				totalSpeed = 0;
+				lapCount = 0;
+				
+                // Show medal based on average speed
+                let medal;
+                if (avgSpeed >= 9) {
+                    medal = "gold";
+                } else if (avgSpeed >= 6) {
+                    medal = "silver";
+                } else {
+                    medal = "bronze";
+                }
+
+                showMedal(medal);
+
+                gameOverScreen.style.display = "flex";
+                canvas.style.display = "none";
+            }
+
+            function showMedal(medal) {
+                // Simple SVG code for different medal types
+                let medalSVGContent;
+                if (medal === "gold") {
+                    medalSVGContent = `
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" fill="gold" />
+                            <text x="50" y="55" text-anchor="middle" font-size="20" fill="white">Gold</text>
+                        </svg>
+                    `;
+                } else if (medal === "silver") {
+                    medalSVGContent = `
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" fill="silver" />
+                            <text x="50" y="55" text-anchor="middle" font-size="20" fill="black">Silver</text>
+                        </svg>
+                    `;
+                } else {
+                    medalSVGContent = `
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" fill="brown" />
+                            <text x="50" y="55" text-anchor="middle" font-size="20" fill="white">Bronze</text>
+                        </svg>
+                    `;
+                }
+
+                medalSVG.innerHTML = medalSVGContent;
+            }
+
+            function loop() {
+                if (lapCount < 10) {
+                    updateCar();
+                    renderCar();
+                    updateTimer();
+                    requestAnimationFrame(loop);
+                } else {
+                    endGame();
+                }
+            }
+
+            loop();
         }
+
+        restartButton.addEventListener("click", () => {
+            gameOverScreen.style.display = "none";
+            menu.style.display = "flex";
+        });
     </script>
 </body>
 </html>
