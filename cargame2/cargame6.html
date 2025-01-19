@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Game with Menu</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        #menu, #carSelection {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        #carOptions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            max-width: 90%;
+        }
+        .car-option {
+            display: flex;
+            align-items: center;
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .car-option:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .car-option img {
+            width: 80px;
+            height: auto;
+            margin-right: 20px;
+        }
+        .stats {
+            display: flex;
+            flex-direction: column;
+        }
+        .stats span {
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="menu">
+        <h1>Welcome to the Car Game</h1>
+        <button id="playButton">Play</button>
+    </div>
+
+    <div id="carSelection" style="display: none;">
+        <h2>Select Your Car</h2>
+        <div id="carOptions"></div>
+    </div>
+
+    <canvas id="gameCanvas" style="display: none;"></canvas>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Car data: each car has display stats and internal numeric parameters
+        const cars = [
+            {
+                src: "car1.svg",
+                display: { speed: "Good", handling: "Average", acceleration: "Good" },
+                params: { maxSpeed: 11, maxReverseSpeed: -4, accelerationFactor: 0.3, driftFactor: 0.6 }
+            },
+            {
+                src: "car2.svg",
+                display: { speed: "Average", handling: "Good", acceleration: "Bad" },
+                params: { maxSpeed: 9, maxReverseSpeed: -3, accelerationFactor: 0.1, driftFactor: 0.8 }
+            },
+            {
+                src: "car3.svg",
+                display: { speed: "Bad", handling: "Good", acceleration: "Good" },
+                params: { maxSpeed: 7, maxReverseSpeed: -2, accelerationFactor: 0.2, driftFactor: 0.8 }
+            },
+            {
+                src: "car4.svg",
+                display: { speed: "Good", handling: "Bad", acceleration: "Average" },
+                params: { maxSpeed: 11, maxReverseSpeed: -4, accelerationFactor: 0.2, driftFactor: 0.4 }
+            },
+            {
+                src: "car5.svg",
+                display: { speed: "Average", handling: "Average", acceleration: "Good" },
+                params: { maxSpeed: 9, maxReverseSpeed: -3, accelerationFactor: 0.3, driftFactor: 0.6 }
+            },
+            {
+                src: "car6.svg",
+                display: { speed: "Good", handling: "Good", acceleration: "Good" },
+                params: { maxSpeed: 11, maxReverseSpeed: -4, accelerationFactor: 0.3, driftFactor: 0.8 }
+            },
+            {
+                src: "car7.svg",
+                display: { speed: "Bad", handling: "Average", acceleration: "Bad" },
+                params: { maxSpeed: 7, maxReverseSpeed: -2, accelerationFactor: 0.1, driftFactor: 0.6 }
+            },
+            {
+                src: "car8.svg",
+                display: { speed: "Good", handling: "Good", acceleration: "Average" },
+                params: { maxSpeed: 11, maxReverseSpeed: -4, accelerationFactor: 0.2, driftFactor: 0.8 }
+            }
+        ];
+
+        let selectedCar;
+
+        const menu = document.getElementById("menu");
+        const carSelection = document.getElementById("carSelection");
+        const carOptions = document.getElementById("carOptions");
+        const playButton = document.getElementById("playButton");
+
+        playButton.addEventListener("click", () => {
+            menu.style.display = "none";
+            carSelection.style.display = "flex";
+            displayCarOptions();
+        });
+
+        function displayCarOptions() {
+            carOptions.innerHTML = ""; // Clear options for re-entry
+            cars.forEach((car, index) => {
+                const carOption = document.createElement("div");
+                carOption.className = "car-option";
+
+                const carImage = document.createElement("img");
+                carImage.src = car.src;
+
+                const stats = document.createElement("div");
+                stats.className = "stats";
+                stats.innerHTML = `
+                    <span>Speed: ${car.display.speed}</span>
+                    <span>Handling: ${car.display.handling}</span>
+                    <span>Acceleration: ${car.display.acceleration}</span>
+                `;
+
+                carOption.appendChild(carImage);
+                carOption.appendChild(stats);
+                carOptions.appendChild(carOption);
+
+                carOption.addEventListener("click", () => {
+                    selectedCar = car;
+                    startGame();
+                });
+            });
+        }
+
+        function startGame() {
+            carSelection.style.display = "none";
+            canvas.style.display = "block";
+            initGame(selectedCar);
+        }
+
+        function initGame(car) {
+            const carImage = new Image();
+            carImage.src = car.src;
+
+            const carData = {
+                xPos: canvas.width / 2,
+                yPos: canvas.height / 2,
+                speed: 0,
+                angle: 0,
+                driftAngle: 0,
+                angularVelocity: 0,
+                xSpeed: 0,
+                ySpeed: 0
+            };
+
+            const carConstants = {
+                maxSpeed: car.params.maxSpeed,
+                maxReverseSpeed: car.params.maxReverseSpeed,
+                accelerationFactor: car.params.accelerationFactor,
+                decelerationFactor: 0.1,
+                driftFactor: car.params.driftFactor,
+                turnFactor: 0.0035,
+                maxAngularVelocity: 0.15,
+                dragFactor: 0.98,
+                frictionFactor: 0.94
+            };
+
+            const controller = {
+                ArrowUp: { pressed: false, func: () => (carData.speed < carConstants.maxSpeed ? carData.speed += carConstants.accelerationFactor : null) },
+                ArrowDown: { pressed: false, func: () => (carData.speed > carConstants.maxReverseSpeed ? carData.speed -= carConstants.decelerationFactor : null) },
+                ArrowLeft: { pressed: false, func: () => (carData.angularVelocity > -carConstants.maxAngularVelocity ? carData.angularVelocity -= carConstants.turnFactor : null) },
+                ArrowRight: { pressed: false, func: () => (carData.angularVelocity < carConstants.maxAngularVelocity ? carData.angularVelocity += carConstants.turnFactor : null) }
+            };
+
+            document.addEventListener("keydown", (e) => {
+                if (controller[e.key]) controller[e.key].pressed = true;
+            });
+
+            document.addEventListener("keyup", (e) => {
+                if (controller[e.key]) controller[e.key].pressed = false;
+            });
+
+            function updateCar() {
+                Object.values(controller).forEach(ctrl => {
+                    if (ctrl.pressed) ctrl.func();
+                });
+
+                carData.angularVelocity *= carConstants.frictionFactor;
+                carData.driftAngle += carConstants.driftFactor * carData.angularVelocity;
+                carData.driftAngle *= carConstants.frictionFactor;
+                carData.angle += carData.angularVelocity;
+                carData.speed *= carConstants.dragFactor;
+
+                carData.xSpeed = Math.sin(carData.angle - carData.driftAngle) * carData.speed;
+                carData.ySpeed = Math.cos(carData.angle - carData.driftAngle) * carData.speed;
+
+                carData.xPos += carData.xSpeed;
+                carData.yPos -= carData.ySpeed;
+
+                if (carData.xPos > canvas.width) carData.xPos = 0;
+                if (carData.xPos < 0) carData.xPos = canvas.width;
+                if (carData.yPos > canvas.height) carData.yPos = 0;
+                if (carData.yPos < 0) carData.yPos = canvas.height;
+            }
+
+            function renderCar() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.save();
+                ctx.translate(carData.xPos, carData.yPos);
+                ctx.rotate(carData.angle + carData.driftAngle);
+                ctx.drawImage(carImage, -25, -50, 50, 100);
+                ctx.restore();
+            }
+
+            function animate() {
+                updateCar();
+                renderCar();
+                requestAnimationFrame(animate);
+            }
+
+            carImage.onload = () => {
+                animate();
+            };
+        }
+    </script>
+</body>
+</html>
