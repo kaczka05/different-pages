@@ -21,17 +21,18 @@
             color: #ffffff;
             padding: 20px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            display: block;
             position: fixed;
             top: 0;
             left: 0;
             height: 100%;
-            transform: translateX(-100%);
             transition: transform 0.3s ease;
             z-index: 1000;
         }
         .sidebar.active {
             transform: translateX(0);
+        }
+        .sidebar.hidden {
+            transform: translateX(-100%);
         }
         .sidebar h2 {
             margin: 0 0 20px;
@@ -57,7 +58,7 @@
         .content {
             flex-grow: 1;
             padding: 20px;
-            margin-left: 250px;
+            margin-left: 250px; /* Reserve space for the sidebar */
         }
         .file-section {
             display: none;
@@ -109,6 +110,13 @@
             .container {
                 flex-direction: column;
             }
+            .sidebar {
+                margin-left: 0;
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
             .content {
                 margin-left: 0;
             }
@@ -142,7 +150,7 @@
                 selectedSection.style.display = 'block';
             }
 
-            // Hide the sidebar on mobile
+            // Hide the sidebar on mobile after selecting
             if (window.innerWidth <= 768) {
                 toggleMenu();
             }
@@ -151,6 +159,7 @@
         function toggleMenu() {
             const sidebar = document.querySelector('.sidebar');
             sidebar.classList.toggle('active');
+            sidebar.classList.toggle('hidden');
         }
 
         function searchSection() {
@@ -182,7 +191,7 @@
 
     <div class="container">
         <button class="menu-button" onclick="toggleMenu()">Menu</button>
-        <div class="sidebar">
+        <div class="sidebar active">
             <h2>Politechnika Łódzka</h2>
             <ul class="menu">
                 <li><a onclick="showContent('general')">General Organisation</a></li>
