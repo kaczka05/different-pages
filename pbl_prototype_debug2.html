@@ -67,6 +67,32 @@
             text-decoration: underline;
         }
 
+        /* Top bar with search */
+        .top-bar {
+            background-color: #960d03; /* Red */
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .search-bar {
+            width: 50%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+        }
+
+        .search-bar::placeholder {
+            color: #999;
+        }
+
         /* Mobile specific styles */
         @media (max-width: 768px) {
             .container {
@@ -108,16 +134,6 @@
             border-radius: 10px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
-
-        /* Search bar style */
-        .search-bar {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
     </style>
     <script>
         function showContent(sectionId) {
@@ -131,16 +147,22 @@
                 selectedSection.style.display = 'block';
             }
 
-            // Hide the sidebar if in mobile view
+            // Hide the sidebar after selection, but only on mobile
             if (window.innerWidth <= 768) {
-                document.querySelector('.sidebar').classList.remove('active');
+                document.querySelector('.sidebar').classList.add('hide');
+                document.querySelector('.menu-button').style.display = 'block'; // Show the menu toggle button
             }
         }
 
         function toggleMenu() {
             const sidebar = document.querySelector('.sidebar');
-            sidebar.classList.toggle('active');
-        }
+            sidebar.classList.toggle('hide'); // Toggle the sidebar visibility
+            const button = document.querySelector('.menu-button');
+            if (sidebar.classList.contains('hide')) {
+                button.style.display = 'block'; // Show the menu button when the sidebar is hidden
+            } else {
+                button.style.display = 'none'; // Hide the menu button when the sidebar is open
+            }
 
         function searchSection() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
@@ -148,8 +170,8 @@
             let found = false;
 
             sections.forEach(section => {
-                const sectionTitle = section.querySelector('h3').textContent.toLowerCase();
-                if (sectionTitle.includes(searchTerm)) {
+                const content = section.textContent.toLowerCase();
+                if (content.includes(searchTerm)) {
                     section.style.display = 'block';
                     section.scrollIntoView({ behavior: 'smooth' }); // Scroll to the section
                     found = true;
@@ -159,15 +181,15 @@
             });
 
             if (!found) {
-                alert('No matching section found!');
+                alert('No matching content found!');
             }
         }
     </script>
 </head>
 <body>
-    <!-- Search Bar at the top of the page -->
-    <div>
-        <input type="text" id="search-input" class="search-bar" placeholder="Search sections..." onkeyup="searchSection()">
+    <!-- Top Bar with Search -->
+    <div class="top-bar">
+        <input type="text" id="search-input" class="search-bar" placeholder="Search for content..." onkeyup="searchSection()">
     </div>
 
     <div class="container">
@@ -185,60 +207,24 @@
             </ul>
         </div>
         <div class="content">
-            <!-- zakładka -->
+            <!-- Sections -->
             <div id="general" class="file-section">
                 <h3>General Organisation</h3>
                 <p>Learn about the university's organisational structure, departments, and administrative contacts.</p>
-                <li><a href="#aktualnosci">Aktualności</a></li>
-                <section id="aktualnosci" class="section">
-                    <h1>Aktualności</h1>
-                    <p>1. What are the office hours of the dean's office and where is it located?</p></br>
-                    <p>Office hours vary depending on the faculty. Generally, they are weekdays from 8:00 AM to 4:00 PM. Detailed information about office hours and the location of the dean's office can be found on the university website or directly on the dean's office door.</p></br>
-                    <p>2. How can I obtain a certificate of enrollment?</p></br>
-                    <p>You can obtain a certificate of enrollment by submitting a request to the dean's office. Certificates are typically issued within a few working days.</p></br>
-                    <!-- Add more content here -->
+                <section>
+                    <h1>Details</h1>
+                    <p>The university's organisation is structured into faculties and departments...</p>
                 </section>
-                <a href="files/general_organisation.pdf" target="_blank">Download: General Organisation (PDF)</a>
             </div>
-            <!-- zakładka -->
             <div id="scholarships" class="file-section">
                 <h3>Scholarships</h3>
                 <p>Details about available scholarships and how to apply.</p>
-                <li><a href="#types_of_scholaships">Types of scholarships</a></li>
-                <li><a href="#scholarship_guidlines">Guidelines</a></li>
-                <section id="types_of_scholaships" class="section">
-                    <h1>Types of scholarships</h1>
-                    <p>Students at the Lodz University of Technology can apply for financial assistance in the form of:</p>
-                    <li>social scholarship</li>
-                    <li>scholarship for disabled people</li>
-                    <li>financial aid</li>
-                    <li>rector's scholarship</li>
+                <section>
+                    <h1>Types of Scholarships</h1>
+                    <p>Scholarships include academic, social, and rector's scholarships...</p>
                 </section>
-                <section id="scholarship_guidlines" class="section">
-                    <h1>Scholarship guidelines</h1>
-                    <p>1. What scholarships are available for students?</p></br>
-                    <p>Available scholarships include social, academic, rector’s, sports, and scholarships for students with disabilities. Detailed information is available on the university website or at the dean's office.</p></br>
-                    <p>2. What documents are required to apply for a social scholarship?</p></br>
-                    <p>Required documents include, among others, a certificate of family income, a certificate of family size, and other documents confirming the financial situation (e.g., administrative decisions, tax returns).</p></br>
-                    <!-- Add more content here -->
-                </section>
-                <a href="files/scholarships.pdf" target="_blank">Download: Scholarships Information (PDF)</a>
             </div>
-            <!-- zakładka -->
-            <div id="admissions" class="file-section">
-                <h3>Admissions</h3>
-                <p>Understand the university's admissions policies.</p>
-                <li><a href="#application_process">Application Process</a></li>
-                <li><a href="#important_dates">Important Dates</a></li>
-                <section id="application_process" class="section">
-                    <h1>Application Process</h1>
-                </section>
-                <section id="important_dates" class="section">
-                    <h1>Important Dates</h1>
-                </section>
-                <a href="files/exams_grading.pdf" target="_blank">Download: Exams & Grading Policies (PDF)</a>
-            </div>
-            <!-- Add additional content here -->
+            <!-- Add additional sections here -->
         </div>
     </div>
 </body>
