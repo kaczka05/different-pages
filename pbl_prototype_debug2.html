@@ -21,7 +21,6 @@
             color: #ffffff;
             padding: 20px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            display: block;
         }
         .sidebar h2 {
             margin: 0 0 20px;
@@ -101,6 +100,11 @@
             .sidebar {
                 width: 100%;
                 display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 1001;
             }
             .sidebar.active {
                 display: block;
@@ -116,8 +120,7 @@
                 padding: 10px;
                 font-size: 16px;
                 cursor: pointer;
-                text-align: center;
-                z-index: 1000;
+                z-index: 1002;
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             }
         }
@@ -126,43 +129,30 @@
             display: none;
         }
 
-        .section {
-            padding: 1rem 1.5rem;
-            max-width: 1200px;
-            margin: 1rem;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        .hide {
+            display: none !important;
         }
     </style>
     <script>
         function showContent(sectionId) {
-            // Hide all sections
             const sections = document.querySelectorAll('.file-section');
             sections.forEach(section => section.style.display = 'none');
 
-            // Show the selected section
             const selectedSection = document.getElementById(sectionId);
             if (selectedSection) {
                 selectedSection.style.display = 'block';
             }
 
-            // Hide the sidebar after selection, but only on mobile
+            // Hide the sidebar on mobile
             if (window.innerWidth <= 768) {
-                document.querySelector('.sidebar').classList.add('hide');
-                document.querySelector('.menu-button').style.display = 'block'; // Show the menu toggle button
+                toggleMenu();
             }
         }
 
         function toggleMenu() {
             const sidebar = document.querySelector('.sidebar');
-            sidebar.classList.toggle('hide'); // Toggle the sidebar visibility
-            const button = document.querySelector('.menu-button');
-            if (sidebar.classList.contains('hide')) {
-                button.style.display = 'block'; // Show the menu button when the sidebar is hidden
-            } else {
-                button.style.display = 'none'; // Hide the menu button when the sidebar is open
-            }
+            sidebar.classList.toggle('active');
+        }
 
         function searchSection() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
@@ -173,7 +163,7 @@
                 const content = section.textContent.toLowerCase();
                 if (content.includes(searchTerm)) {
                     section.style.display = 'block';
-                    section.scrollIntoView({ behavior: 'smooth' }); // Scroll to the section
+                    section.scrollIntoView({ behavior: 'smooth' });
                     found = true;
                 } else {
                     section.style.display = 'none';
@@ -187,7 +177,6 @@
     </script>
 </head>
 <body>
-    <!-- Top Bar with Search -->
     <div class="top-bar">
         <input type="text" id="search-input" class="search-bar" placeholder="Search for content..." onkeyup="searchSection()">
     </div>
@@ -207,24 +196,14 @@
             </ul>
         </div>
         <div class="content">
-            <!-- Sections -->
             <div id="general" class="file-section">
                 <h3>General Organisation</h3>
                 <p>Learn about the university's organisational structure, departments, and administrative contacts.</p>
-                <section>
-                    <h1>Details</h1>
-                    <p>The university's organisation is structured into faculties and departments...</p>
-                </section>
             </div>
             <div id="scholarships" class="file-section">
                 <h3>Scholarships</h3>
                 <p>Details about available scholarships and how to apply.</p>
-                <section>
-                    <h1>Types of Scholarships</h1>
-                    <p>Scholarships include academic, social, and rector's scholarships...</p>
-                </section>
             </div>
-            <!-- Add additional sections here -->
         </div>
     </div>
 </body>
