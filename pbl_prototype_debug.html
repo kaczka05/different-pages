@@ -69,6 +69,32 @@
             text-decoration: underline;
         }
 
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .search-bar input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .search-bar button {
+            padding: 10px;
+            margin-left: 10px;
+            background-color: #960d03;
+            color: #ffffff;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .search-bar button:hover {
+            background-color: #b30e04;
+        }
+
         /* Mobile specific styles */
         @media (max-width: 768px) {
             .container {
@@ -146,6 +172,20 @@
                 button.style.display = 'none'; // Hide the menu button when the sidebar is open
             }
         }
+
+        function searchContent() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const sections = document.querySelectorAll('.file-section');
+
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        }
     </script>
 </head>
 <body>
@@ -164,6 +204,11 @@
             </ul>
         </div>
         <div class="content">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search...">
+                <button onclick="searchContent()">Search</button>
+            </div>
+
             <!-- Content Sections -->
             <div id="general" class="file-section">
                 <h3>General Organisation</h3>
